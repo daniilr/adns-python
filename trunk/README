@@ -1,0 +1,99 @@
+Build Instructions
+==================
+
+First, you gotta have the adns_ libraries installed somewhere. Maybe
+your OS vendor has it packaged already.
+
+.. _adns:http://www.chiark.greenend.org.uk/~ian/adns/
+
+Second, you gotta have Distutils_, which comes in Python 1.6 and up. If you
+have Python 1.5.2, *upgrade already*!
+
+.. _Distutils:http://www.python.org/sigs/distutils-sig/download.html
+
+Then, you can build and install:
+
+    $ python setup.py build
+    # python setup.py install # this is as root; use su or sudo
+
+Other useful things:
+
+    $ python setup.py bdist # make a binary distribution
+    $ python setup.py bdist_rpm # make an RPM
+
+RTFM for Distutils for more options.
+
+Usage
+=====
+
+See the included test programs for examples. A simple interactive
+example that uses synchronous queries:
+
+    >>> import adns
+    >>> s=adns.init()
+    >>> s.synchronous('python.org',adns.rr.MX)
+    (0, None, 1107034862, ((50, ('mail.python.org', 0,
+    ((2, '194.109.207.14'),))),))
+
+Results are generally returned as a 4-tuple: status, CNAME, expires, answer
+
+status is the adns status, enumerated in adns.status.
+
+CNAME is the CNAME of the answer, if any (None if the query target is not a
+CNAME)
+
+expires is the time (in ticks) that the answer's TTL expires.
+
+answer is what you really want. Since queries generally can return more than
+one answer, answer is returned as an n-tuple. The format of each item in the
+tuple depends on what type of RR was requested.
+
+    >>> s.synchronous('python.org',adns.rr.MXraw)
+    (0, None, 1107034862, ((50, 'mail.python.org'),))
+
+In this case, MXraw returns only the MX data (priority and hostname). MX
+does further expansions upon the hostname, returning a tuple of hostname,
+status for the following data, and then a tuple of rr.ADDR answers, which
+are the address class and the IP address, i.e.
+
+    >>> s.synchronous('mail.python.org',adns.rr.ADDR)
+    (0, None, 1107034862, ((2, '194.109.207.14'),))
+
+and compare to:
+
+    >>> s.synchronous('mail.python.org',adns.rr.A)
+    (0, None, 1107034862, ('194.109.207.14',))
+
+Prefer to use exceptions to processing status codes? adns.exception(status)
+will raise an appropriate exception. Sometimes you need to have the result,
+even when there is an exceptional condition. The exceptions are:
+
+  Error
+    +- NotReadyError
+    +- LocalError
+    +- RemoteError
+    |    +- RemoteFailureError
+    |    +- RemoteTempError
+    +- QueryError
+    +- PermanentError
+         +- NXDomain
+         +- NoData
+
+For asynchronous examples, see ADNS.py, hostmx.py, and DNSBL.py.
+
+This is the first release of adns-python in four years. There are a
+couple reasons for this: First, there really hasn't been a compelling
+reason to make a new release. There weren't any significant bugs or
+shortcomings to fix, and adns as only had a bugfix release, with no
+new features. Second, while there are been a *few* small things to
+fix, I haven't been using adns-python, simply because I haven't had an
+application for it. However, it passes my tests with Python 2.3 and
+adns-1.1, so it should still be fine for use.
+
+The only new feature in 1.1.0 is support for TXT records, which was
+left out of 1.0.0, and there are a couple of very small bug fixes;
+if you want to know what they are, use diff.
+
+Andy Dustman
+<andy@dustman.net>
+January 29, 2005
