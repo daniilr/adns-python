@@ -6,9 +6,6 @@ import os, sys
 from distutils.core import setup
 from distutils.extension import Extension
 
-YES = 1
-NO = 0
-
 # You probably don't have to do anything past this point. If you
 # do, please mail me the configuration for your platform. Don't
 # forget to include the value of sys.platform and os.name.
@@ -32,11 +29,11 @@ http://www.gnu.org/software/adns/
 """
 setup (# Distribution meta-data
     name = "adns-python",
-    version = "1.1.0",
+    version = "1.1.1",
     description = "An interface to GNU adns",
     author = "Andy Dustman",
-    author_email = "andy@dustman.net",
-    url = "http://dustman.net/andy/python/adns-python",
+    author_email = "farcepest@gmail.com",
+    url = "http://code.google.com/p/adns-python",
     long_description=long_description,
     license = "GPL",
     classifiers = [
