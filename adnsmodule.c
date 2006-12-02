@@ -174,6 +174,7 @@ interpret_hostaddr(
 	}
 	o = Py_BuildValue("siO", hostaddr->host, hostaddr->astatus,
 			  addrs);
+	Py_DECREF(addrs);
 	return o;
 }
 	
