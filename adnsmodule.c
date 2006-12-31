@@ -88,9 +88,10 @@ static _constant_class adns_qflags[] = {
 };
 
 static _constant_class adns_rr[] = {
-	{ "typemask", adns__rrt_typemask },
+	{ "typemask", adns_rrt_typemask },
 	{ "deref", adns__qtf_deref },
 	{ "mail822", adns__qtf_mail822 },
+	{ "unknown", adns_r_unknown },
 	{ "none", adns_r_none },
 	{ "A", adns_r_a },
 	{ "NSraw", adns_r_ns_raw },
@@ -106,6 +107,8 @@ static _constant_class adns_rr[] = {
 	{ "TXT", adns_r_txt },
 	{ "RPraw", adns_r_rp_raw },
 	{ "RP", adns_r_rp },
+	{ "SRVraw", adns_r_srv_raw },
+	{ "SRV", adns_r_srv },
 	{ "ADDR", adns_r_addr },
 	{ NULL, 0 }
 };
@@ -177,6 +180,17 @@ interpret_hostaddr(
 	Py_DECREF(addrs);
 	return o;
 }
+
+static PyObject *
+interpret_srv(
+	adns_rr_srvraw *srvrr
+	)
+{
+	PyObject *o;
+	o = Py_BuildValue("iiis", srvrr->priority, srvrr->weight, srvrr->port,
+		srvrr->host);
+	return o;
+}
 	
 static PyObject *
 interpret_answer(
@@ -185,7 +199,7 @@ interpret_answer(
 {
 	PyObject *o, *rrs;
 	int i;
-	adns_rrtype t = answer->type & adns__rrt_typemask;
+	adns_rrtype t = answer->type & adns_rrt_typemask;
 	adns_rrtype td = answer->type & adns__qtf_deref;
 
 	rrs = PyTuple_New(answer->nrrs);
@@ -273,6 +287,9 @@ interpret_answer(
 				adns_rr_strpair *v = answer->rrs.strpair+i;
 				a = Py_BuildValue("ss", v->array[0], v->array[1]);
 			}
+			break;
+		case adns_r_srv_raw:
+			a = interpret_srv((answer->rrs.srvraw+i));
 			break;
 		default:
 			a = Py_None;
