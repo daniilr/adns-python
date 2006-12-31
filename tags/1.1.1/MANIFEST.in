@@ -1,0 +1,4 @@
+prune CVS
+include MANIFEST.in
+include MANIFEST
+include GPL
