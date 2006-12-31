@@ -1,4 +1,5 @@
 #summary Description of record types and results
+#labels Featured
 
 = Introduction =
 
@@ -158,9 +159,12 @@ Returns SRV records as (_priority_, _weight_, _port_, _hostname_):
 
 *XXX* What's the difference? SRV should probably resolve the hostname like MX and NS do, but currently it doesn't, which is probably a bug.
 
+SRV reccords are described in RFC 2052. 
+
 == HINFO ==
+
+*XXX*
 
 == RP and RPraw ==
 
-
-SRV reccords are described in RFC 2052. 
+*XXX*
