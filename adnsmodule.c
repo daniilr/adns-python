@@ -182,17 +182,6 @@ interpret_hostaddr(
 }
 
 static PyObject *
-interpret_srv(
-	adns_rr_srvraw *srvrr
-	)
-{
-	PyObject *o;
-	o = Py_BuildValue("iiis", srvrr->priority, srvrr->weight, srvrr->port,
-		srvrr->host);
-	return o;
-}
-	
-static PyObject *
 interpret_answer(
 	adns_answer *answer
 	)
@@ -289,7 +278,15 @@ interpret_answer(
 			}
 			break;
 		case adns_r_srv_raw:
-			a = interpret_srv((answer->rrs.srvraw+i));
+			if (td) {
+				adns_rr_srvha *v = answer->rrs.srvha+i;
+				a = Py_BuildValue("iiiO", v->priority, v->weight, v->port,
+						   interpret_hostaddr(&v->ha));
+			} else {
+				adns_rr_srvraw *v = answer->rrs.srvraw+i;
+				a = Py_BuildValue("iiis", v->priority, v->weight, v->port,
+						   v->host);
+			}
 			break;
 		default:
 			a = Py_None;
