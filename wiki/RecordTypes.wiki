@@ -46,6 +46,8 @@ Like A, but returns 2-tuples of the address family and IP address:
 Note that 2 is the address family for IPv6, though these are IPv4 addresses.
 (Address families are defined in RFC 1700.) So why is it 2 and not 1?...
 
+http://www.iana.org/assignments/address-family-numbers
+
 == CNAME ==
 
 Returns the CNAME (if any) of the target:
@@ -159,7 +161,8 @@ Returns SRV records as (_priority_, _weight_, _port_, _hostname_):
 (0, None, 1167606966, ((1, 0, 88, 'krb1.example.com'),))
 }}}
 
-*XXX* What's the difference? SRV should probably resolve the hostname like MX and NS do, but currently it doesn't, which is probably a bug.
+*XXX* What's the difference? SRV *should* resolve the hostname like MX and NS do, but currently it doesn't
+in release versions. It's fixed in the trunk at r16.
 
 SRV reccords are described in RFC 2052. 
 
