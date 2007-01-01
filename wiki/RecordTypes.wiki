@@ -12,8 +12,9 @@ All queries return data in a tuple as (_status_, _CNAME_, _expires_, _answer_), 
   * _expires_: When the answer expires, in UNIX ticks
   * _answer_: The answer to the query
 
-The format of _answer_ varies depending on the type of query/record. Since DNS queries should be assumed to return multiple answers, _answer_ is always a sequence (tuple) of
-answers.
+The format of _answer_ varies depending on the type of query/record. Since DNS queries
+should be assumed to return multiple answers, _answer_ is always a sequence (tuple) of
+resource records.
 
 = Record Types and Answers =
 
@@ -35,14 +36,15 @@ Returns the IP address of the target.
 
 == ADDR ==
 
-Like A, but returns 2-tuples of the record type and IP address:
+Like A, but returns 2-tuples of the address family and IP address:
 
 {{{
 >>> c.synchronous("www.google.com", adns.rr.ADDR)
 (0, 'www.l.google.com', 1167604334, ((2, '216.239.37.104'), (2, '216.239.37.99')))
 }}}
 
-Note that 2 is the record type for an A record.
+Note that 2 is the address family for IPv6, though these are IPv4 addresses.
+(Address families are defined in RFC 1700.) So why is it 2 and not 1?...
 
 == CNAME ==
 
