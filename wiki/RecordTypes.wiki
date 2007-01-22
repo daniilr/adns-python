@@ -1,5 +1,5 @@
 #summary Description of record types and results
-#labels Featured
+#labels Featured,Documentation
 
 = Introduction =
 
