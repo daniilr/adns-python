@@ -29,7 +29,7 @@ http://www.gnu.org/software/adns/
 """
 setup (# Distribution meta-data
     name = "adns-python",
-    version = "1.2.1",
+    version = "1.2.2",
     description = "An interface to GNU adns",
     author = "Andy Dustman",
     author_email = "farcepest@gmail.com",
