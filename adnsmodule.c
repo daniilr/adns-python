@@ -986,17 +986,20 @@ _file_converter(
 static PyObject *
 adns__init(
 	PyObject *self,	/* Not used */
-	PyObject *args
+	PyObject *args,
+	PyObject *kwargs
 	)
 {
+	static char *kwlist[] = { "flags", "diagfile", "configtest" };
 	adns_initflags flags = 0;
 	int status;
 	FILE *diagfile = NULL;
 	char *configtext = NULL;
 	ADNS_Stateobject *s;
 
-	if (!PyArg_ParseTuple(args, "|iO&s",
-			      &flags, _file_converter, &diagfile, &configtext))
+	if (!PyArg_ParseTupleAndKeywords(
+		args, kwargs, "|iO&s", kwlist,
+		&flags, _file_converter, &diagfile, &configtext))
 		return NULL;
 	if (!(s = newADNS_Stateobject())) return NULL;
 	if (configtext)
@@ -1015,7 +1018,7 @@ adns__init(
 /* List of methods defined in the module */
 
 static struct PyMethodDef adns_methods[] = {
-	{"init",	(PyCFunction)adns__init,	METH_VARARGS,	adns_init__doc__},
+	{"init", (PyCFunction)adns__init, METH_VARARGS|METH_KEYWORDS, adns_init__doc__},
 	{"exception",(PyCFunction)adns_exception, METH_VARARGS, adns_exception__doc__},
  
 	{NULL,	 (PyCFunction)NULL, 0, NULL}		/* sentinel */
