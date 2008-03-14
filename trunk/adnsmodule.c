@@ -990,7 +990,7 @@ adns__init(
 	PyObject *kwargs
 	)
 {
-	static char *kwlist[] = { "flags", "diagfile", "configtest" };
+	static char *kwlist[] = { "flags", "diagfile", "configtext" };
 	adns_initflags flags = 0;
 	int status;
 	FILE *diagfile = NULL;
